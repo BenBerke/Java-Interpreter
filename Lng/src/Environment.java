@@ -31,8 +31,8 @@ public class Environment {
     }
 
     public void debugPrintFunctions() {
-        for (Map.Entry<String, Object> entry : values.entrySet()) 
-        if (entry.getValue() instanceof FunctionValue) System.out.println(" - " + entry.getKey());
+       // for (Map.Entry<String, Object> entry : values.entrySet()) 
+        //if (entry.getValue() instanceof FunctionValue) System.out.println(" - " + entry.getKey());
     }
 
 }

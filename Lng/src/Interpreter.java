@@ -13,15 +13,15 @@ public class Interpreter {
         }
     }
 
-    public double evaluate(Expr expr){
+    public Object evaluate(Expr expr){
         if(expr instanceof Literal){
             Literal literal = (Literal) expr;
             return literal.value;
         }
         else if(expr instanceof Binary){
             Binary binary = (Binary) expr;
-            double left = evaluate(binary.left);
-            double right = evaluate(binary.right);
+            double left = (Double) evaluate(binary.left);
+            double right = (Double) evaluate(binary.right);
             switch(binary.operator.type){
                 case PLUS: return left + right;
                 case MINUS: return left - right;
@@ -48,25 +48,28 @@ public class Interpreter {
         }
         else if (expr instanceof Call) {
             Call call = (Call) expr;
-
-            Object value = environment.get(call.name.lexeme); 
-            if (!(value instanceof FunctionValue)) {
-                throw new RuntimeException("Can only call functions. '" + call.name.lexeme + "' is not a function.");
-            }
-
+            Object value = environment.get(call.name.lexeme);
+            if (!(value instanceof FunctionValue)) throw new RuntimeException("Can only call functions. '" + call.name.lexeme + "' is not a function.");
             FunctionValue fn = (FunctionValue) value;
-
-            // Create a new scope for the call, enclosed by the function’s closure
             Environment callEnv = new Environment(fn.closure);
-
-            // (later) bind params to args here
-
-            executeBlock(fn.declaration.body, callEnv);
-
-            return 0.0; // no return feature yet
-        }       
-
-
+            try {
+                executeBlock(fn.declaration.body, callEnv);
+                return 0.0; 
+            } catch (ReturnSignal rs) {
+                return (Double) rs.value; 
+            }
+        }
+        else if (expr instanceof Unary) {
+            Unary u = (Unary) expr;
+            double right = (Double) evaluate(u.right);
+            if (u.operator.type == TokenType.MINUS) return -right;
+            throw new RuntimeException("Unknown unary operator: " + u.operator.type);
+        }
+        else if(expr instanceof StringExpr){
+            StringExpr s = (StringExpr) expr;
+            return s.value;
+           // throw new RuntimeException("String evaluation not supported in numeric context.");
+        }
         throw new RuntimeException("Unknown expression type");
    }
 
@@ -79,13 +82,15 @@ public class Interpreter {
     public void execute(Stmt stmt){
         if(stmt instanceof PrintStmt){
             PrintStmt printStmt = (PrintStmt) stmt;
-            double value = evaluate(printStmt.expression);
-            System.out.println(value);
+            Object v;
+            if (printStmt.expression instanceof StringExpr) v = ((StringExpr) printStmt.expression).value;
+            else v = evaluate(printStmt.expression); 
+            System.out.println(v);
             return;
         }
         else if(stmt instanceof IfStmt){
             IfStmt ifStmt = (IfStmt) stmt;
-            double conditionValue = evaluate(ifStmt.condition);
+            double conditionValue = (Double) evaluate(ifStmt.condition);
             if(conditionValue != 0){
                 execute(ifStmt.thenBranch);
             }
@@ -93,13 +98,13 @@ public class Interpreter {
         }
         else if(stmt instanceof VarStmt){
             VarStmt varStmt = (VarStmt) stmt;
-            double value = evaluate(varStmt.initializer);
+            double value = (Double) evaluate(varStmt.initializer);
             environment.define(varStmt.name.lexeme, value);
             return;
         }
         else if (stmt instanceof AssignmentStmt) {
             AssignmentStmt a = (AssignmentStmt) stmt;
-            double value = evaluate(a.value);
+            double value = (Double) evaluate(a.value);
             environment.assign(a.name.lexeme, value);
             return;
         }
@@ -119,6 +124,11 @@ public class Interpreter {
             environment.define(f.name.lexeme, fn);
             environment.debugPrintFunctions();                
             return;
+        }
+        else if(stmt instanceof ReturnStmt){
+            ReturnStmt r = (ReturnStmt) stmt;
+            double v = (r.value == null) ? 0.0 : (Double) evaluate(r.value);
+            throw new ReturnSignal(v);
         }
         else {
             throw new RuntimeException("Unknown statement type");

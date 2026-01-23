@@ -1,10 +1,1 @@
-var loopVar = 0;
-var myBool = true;
-func loop(){
-    loopVar = loopVar + 1;
-    print (loopVar + 3) * 5;
-    if(loopVar < 5 & myBool) loop();
-}
-
-loop();
-
+print "5";

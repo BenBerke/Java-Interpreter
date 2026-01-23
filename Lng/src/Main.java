@@ -30,27 +30,14 @@ public class Main {
                     i++;
                 }
                 switch(identifier.toString().toLowerCase()){
-                    case "print":
-                        tokens.add(new Token(TokenType.PRINT, "print", null, line));
-                        break;
-                    case "if":
-                        tokens.add(new Token(TokenType.IF, "if", null, line));
-                        break;
-                    case "var":
-                        tokens.add(new Token(TokenType.VAR, "var", null, line));
-                        break;
-                    case "true":
-                        tokens.add(new Token(TokenType.TRUE, "true", 1.0, line));
-                        break;
-                    case "false":
-                        tokens.add(new Token(TokenType.FALSE, "false", 0.0, line));
-                        break;
-                    case "func":
-                        tokens.add(new Token(TokenType.FUNCTION, "function", null, line));
-                        break;
-                    default:
-                        tokens.add(new Token(TokenType.IDENTIFIER, identifier.toString(), null, line));
-                        break;
+                    case "print": tokens.add(new Token(TokenType.PRINT, "print", null, line)); break;
+                    case "if":tokens.add(new Token(TokenType.IF, "if", null, line)); break;
+                    case "var": tokens.add(new Token(TokenType.VAR, "var", null, line)); break;
+                    case "true": tokens.add(new Token(TokenType.TRUE, "true", 1.0, line));  break;
+                    case "false": tokens.add(new Token(TokenType.FALSE, "false", 0.0, line));  break;
+                    case "func": tokens.add(new Token(TokenType.FUNCTION, "function", null, line)); break;
+                    case "return": tokens.add(new Token(TokenType.RETURN, "return", null, line)); break;
+                    default: tokens.add(new Token(TokenType.IDENTIFIER, identifier.toString(), null, line)); break;
                 }
                 continue;
             }
@@ -70,38 +57,39 @@ public class Main {
                     if(i + 1 < source.length() && source.charAt(i + 1) == '='){
                         tokens.add(new Token(TokenType.EQL_EQL, "==", null, line));
                         i++;
-                    } else {
-                        tokens.add(new Token(TokenType.EQL, "=", null, line));
-                    }
+                    } else tokens.add(new Token(TokenType.EQL, "=", null, line));
                     break;
                 case '<':
                     if(i + 1 < source.length() && source.charAt(i + 1) == '='){
                         tokens.add(new Token(TokenType.SML_EQL, "<=", null, line));
                         i++;
-                    } else {
-                        tokens.add(new Token(TokenType.SML, "<", null, line));
-                    }
+                    } else tokens.add(new Token(TokenType.SML, "<", null, line));
                     break;
                 case '>':
                     if(i + 1 < source.length() && source.charAt(i + 1) == '='){
                         tokens.add(new Token(TokenType.GRTR_EQL, ">=", null, line));
                         i++;
-                    } else {
-                        tokens.add(new Token(TokenType.GRTR, ">", null, line));
-                    }
+                    } else tokens.add(new Token(TokenType.GRTR, ">", null, line));
                     break;
-                case '|':
-                    tokens.add(new Token(TokenType.LOGICAL_OR, "|", null, line));
-                    break;
-                case '&':
-                    tokens.add(new Token(TokenType.LOGICAL_AND, "&", null, line));
-                    break;
-                case '!':
-                    tokens.add(new Token(TokenType.LOGICAL_NOT, "!", null, line));
-                    break;
+                case '|': tokens.add(new Token(TokenType.LOGICAL_OR, "|", null, line)); break;
+                case '&': tokens.add(new Token(TokenType.LOGICAL_AND, "&", null, line)); break;
+                case '!': tokens.add(new Token(TokenType.LOGICAL_NOT, "!", null, line)); break;
                 case '{': tokens.add(new Token(TokenType.LEFT_BRACE, "{", null, line)); break;
                 case '}': tokens.add(new Token(TokenType.RIGHT_BRACE, "}", null, line)); break;
                 case ',': tokens.add(new Token(TokenType.COMMA, ",", null, line)); break;
+                case '"': 
+                    StringBuilder str = new StringBuilder();
+                    while (i + 1 < source.length() && source.charAt(i + 1) != '"') {
+                        i++;
+                        char ch = source.charAt(i);
+                        if (ch == '\n') line++;
+                        str.append(ch);
+                    }
+                    if (i + 1 >= source.length()) throw new RuntimeException("Unterminated string at line " + line);
+    
+                    i++; // consume closing "
+                    tokens.add(new Token(TokenType.STRING, str.toString(), str.toString(), line));
+                break; 
                 default:
                     if(Character.isWhitespace(c)) continue;
                     System.out.println("Unexpected character: " + c + " at line " + line);

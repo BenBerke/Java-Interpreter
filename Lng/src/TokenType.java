@@ -18,9 +18,11 @@ public enum TokenType {
     GRTR_EQL,
 
     VAR,
+    STRING,
     IDENTIFIER,
     TRUE,
     FALSE,
+    RETURN,
 
     FUNCTION,
     LEFT_BRACE,

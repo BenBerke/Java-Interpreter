@@ -31,6 +31,16 @@ public class Parser {
         return or();
     }
 
+    Expr unary() {
+        if (match(TokenType.MINUS)) {              
+            Token op = previous();
+            Expr right = unary();                  
+            return new Unary(op, right);
+        }
+        return factor();
+    }
+
+
     public Expr parse(){
         return expression();
     }
@@ -66,10 +76,10 @@ public class Parser {
     }
 
     Expr term(){
-        Expr expr = factor();
+        Expr expr = unary();
         while(match(TokenType.MULTIPLY, TokenType.DIVIDE)){
             Token operator = previous();
-            Expr right = factor();
+            Expr right = unary();
             expr = new Binary(expr, operator, right);
         }
 
@@ -136,6 +146,12 @@ public class Parser {
         }
         else if(match(TokenType.LEFT_BRACE)) return new BlockStmt(block());
         else if (match(TokenType.FUNCTION)) return functionDeclaration();
+        else if(match(TokenType.RETURN)){
+            Expr value = null;
+            if (!check(TokenType.SEMICOLON)) value = expression();
+            consume(TokenType.SEMICOLON, "Expect ';' after return value.");
+            return new ReturnStmt(value);
+        }
         Expr expr = expression();
         consume(TokenType.SEMICOLON, "Expect ';' after expression.");
         return new ExpressionStmt(expr);
@@ -179,6 +195,9 @@ public class Parser {
             consume(TokenType.RIGHT_PAREN, "Expect ')' after expression.");
             return new Grouping(expr);
         }
+        else if (match(TokenType.STRING)) return new StringExpr((String) previous().literal);
+
+
         throw error(peek(), "Expect expression.");
     }
 
