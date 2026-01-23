@@ -1,1 +1,9 @@
-print "5";
+var i = 0;
+func loop(){
+    i = i + 1;
+    print i;
+    if(i >= 5) return;
+    loop();
+}
+
+loop();

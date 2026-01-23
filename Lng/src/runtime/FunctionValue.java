@@ -1,6 +1,10 @@
+package runtime;
+
+import statements.FuncStmt;
+
 public class FunctionValue {
-    final FuncStmt declaration;
-    final Environment closure; 
+    public final FuncStmt declaration;
+    public final Environment closure; 
 
     public FunctionValue(FuncStmt declaration, Environment closure) {
         this.declaration = declaration;

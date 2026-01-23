@@ -1,3 +1,5 @@
+package tokens;
+
 public enum TokenType {
     PLUS,
     MINUS,

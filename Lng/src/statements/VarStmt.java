@@ -1,6 +1,11 @@
+package statements;
+
+import expressions.Expr;
+import tokens.Token;
+
 public class VarStmt extends Stmt {
-    final Token name;
-    final Expr initializer;
+    public final Token name;
+    public final Expr initializer;
 
     public VarStmt(Token name, Expr initializer){
         this.name = name;

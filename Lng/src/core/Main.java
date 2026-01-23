@@ -1,6 +1,15 @@
+package core;
+
 import java.util.ArrayList;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import expressions.Binary;
+import expressions.Expr;
+import expressions.Grouping;
+import expressions.Literal;
+import statements.Stmt;
+import tokens.Token;
+import tokens.TokenType;
 
 public class Main {
     public static void main(String[] args) throws Exception {

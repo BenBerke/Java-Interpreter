@@ -1,3 +1,7 @@
+package statements;
+
+import expressions.Expr;
+
 public class PrintStmt extends Stmt {
     public final Expr expression;
 

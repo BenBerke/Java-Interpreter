@@ -1,3 +1,7 @@
+package expressions;
+
+import tokens.Token;
+
 public class Variable extends Expr {
     public final Token name;
 

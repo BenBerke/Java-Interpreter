@@ -1,4 +1,27 @@
+package core;
+
 import java.util.ArrayList;
+import expressions.Binary;
+import expressions.Call;
+import expressions.Expr;
+import expressions.Grouping;
+import expressions.Literal;
+import expressions.StringExpr;
+import expressions.Unary;
+import expressions.Variable;
+import runtime.Environment;
+import runtime.FunctionValue;
+import runtime.ReturnSignal;
+import statements.AssignmentStmt;
+import statements.BlockStmt;
+import statements.ExpressionStmt;
+import statements.FuncStmt;
+import statements.IfStmt;
+import statements.PrintStmt;
+import statements.ReturnStmt;
+import statements.Stmt;
+import statements.VarStmt;
+import tokens.TokenType;
 
 public class Interpreter {
     private Environment environment = new Environment();

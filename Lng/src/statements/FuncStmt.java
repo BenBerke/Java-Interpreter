@@ -1,4 +1,7 @@
+package statements;
+
 import java.util.ArrayList;
+import tokens.Token;
 
 public class FuncStmt extends Stmt {
     public final Token name;

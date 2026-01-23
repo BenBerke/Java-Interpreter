@@ -1,3 +1,7 @@
+package statements;
+
+import expressions.Expr;
+
 public class IfStmt extends Stmt {
     public final Expr condition;
     public final Stmt thenBranch;
