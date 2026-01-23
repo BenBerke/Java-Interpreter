@@ -1,9 +1,12 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
+
 import expressions.Binary;
 import expressions.Call;
 import expressions.Expr;
+import expressions.Get;
 import expressions.Grouping;
 import expressions.Literal;
 import expressions.StringExpr;
@@ -66,22 +69,25 @@ public class Interpreter {
         }
         else if (expr instanceof Variable) {
             Variable variable = (Variable) expr;
-            Object value = environment.get(variable.name.lexeme); 
-            return (Double) value; 
+            return environment.get(variable.name.lexeme);
         }
         else if (expr instanceof Call) {
-            Call call = (Call) expr;
-            Object value = environment.get(call.name.lexeme);
-            if (!(value instanceof FunctionValue)) throw new RuntimeException("Can only call functions. '" + call.name.lexeme + "' is not a function.");
-            FunctionValue fn = (FunctionValue) value;
-            Environment callEnv = new Environment(fn.closure);
-            try {
-                executeBlock(fn.declaration.body, callEnv);
-                return 0.0; 
-            } catch (ReturnSignal rs) {
-                return (Double) rs.value; 
-            }
+            Object callee = environment.get(call.name.lexeme);
+ArrayList<Object> args = new ArrayList<>();
+for (Expr a : call.args) args.add(evaluate(a));
+
+if (callee instanceof FunctionValue) {
+   ... your existing user-function call ...
+} else if (callee instanceof Callable) {
+   Callable c = (Callable) callee;
+   if (args.size() != c.arity()) throw new RuntimeException("Wrong arity");
+   return c.call(args);
+} else {
+   throw new RuntimeException("Not callable: " + call.name.lexeme);
+}
+
         }
+
         else if (expr instanceof Unary) {
             Unary u = (Unary) expr;
             double right = (Double) evaluate(u.right);
@@ -93,6 +99,16 @@ public class Interpreter {
             return s.value;
            // throw new RuntimeException("String evaluation not supported in numeric context.");
         }
+        else if (expr instanceof Get) {
+            Get g = (Get) expr;
+            Object obj = evaluate(g.object);
+
+            if (obj instanceof ModuleValue) {
+                return ((ModuleValue) obj).get(g.name.lexeme);
+            }
+            throw new RuntimeException("Only modules have properties for now.");
+        }   
+
         throw new RuntimeException("Unknown expression type");
    }
 
@@ -121,13 +137,13 @@ public class Interpreter {
         }
         else if(stmt instanceof VarStmt){
             VarStmt varStmt = (VarStmt) stmt;
-            double value = (Double) evaluate(varStmt.initializer);
+            Object value = evaluate(varStmt.initializer);
             environment.define(varStmt.name.lexeme, value);
             return;
         }
         else if (stmt instanceof AssignmentStmt) {
             AssignmentStmt a = (AssignmentStmt) stmt;
-            double value = (Double) evaluate(a.value);
+            Object value = evaluate(a.value);
             environment.assign(a.name.lexeme, value);
             return;
         }
@@ -150,7 +166,7 @@ public class Interpreter {
         }
         else if(stmt instanceof ReturnStmt){
             ReturnStmt r = (ReturnStmt) stmt;
-            double v = (r.value == null) ? 0.0 : (Double) evaluate(r.value);
+            Object v = (r.value == null) ? 0.0 : evaluate(r.value);
             throw new ReturnSignal(v);
         }
         else {
