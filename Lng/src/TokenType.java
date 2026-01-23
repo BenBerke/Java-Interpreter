@@ -6,5 +6,30 @@ public enum TokenType {
     NUMBER,
     LEFT_PAREN,
     RIGHT_PAREN,
+    SEMICOLON,
+    EQL,
+    COMMA,
+
+    IF,
+    EQL_EQL,
+    SML,
+    SML_EQL,
+    GRTR,
+    GRTR_EQL,
+
+    VAR,
+    IDENTIFIER,
+    TRUE,
+    FALSE,
+
+    FUNCTION,
+    LEFT_BRACE,
+    RIGHT_BRACE,
+
+    LOGICAL_NOT,
+    LOGICAL_AND,
+    LOGICAL_OR,
+
+    PRINT,
     EOF
 }
