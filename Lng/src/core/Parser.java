@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import expressions.Binary;
 import expressions.Call;
 import expressions.Expr;
-import expressions.Get;
 import expressions.Grouping;
 import expressions.Literal;
 import expressions.StringExpr;
@@ -59,7 +58,7 @@ public class Parser {
             Expr right = unary();                  
             return new Unary(op, right);
         }
-        return postfix();
+        return factor();
     }
 
 
@@ -198,11 +197,13 @@ public class Parser {
 
             if (match(TokenType.LEFT_PAREN)) {
                 ArrayList<Expr> args = new ArrayList<>();
-                if (!check(TokenType.RIGHT_PAREN)) {
-                     do {
-                         args.add(expression());
-                     } while (match(TokenType.COMMA));
-                }
+
+                // (optional for later) parse arguments:
+                // if (!check(TokenType.RIGHT_PAREN)) {
+                //     do {
+                //         args.add(expression());
+                //     } while (match(TokenType.COMMA));
+                // }
 
                 consume(TokenType.RIGHT_PAREN, "Expect ')' after function call.");
                 return new Call(name, args);
@@ -220,34 +221,6 @@ public class Parser {
 
         throw error(peek(), "Expect expression.");
     }
-
-    Expr postfix() {
-        Expr expr = factor();
-
-        while (true) {
-            if (match(TokenType.LEFT_PAREN)) {
-                ArrayList<Expr> args = new ArrayList<>();
-                if (!check(TokenType.RIGHT_PAREN)) {
-                    do { args.add(expression()); }
-                    while (match(TokenType.COMMA));
-                }
-                consume(TokenType.RIGHT_PAREN, "Expect ')' after arguments.");
-                if (expr instanceof Variable) {
-                    expr = new Call(((Variable) expr).name, args);
-                } else {
-                throw error(peek(), "Can only call a function name for now.");
-                }
-            }
-            else if (match(TokenType.DOT)) {
-                Token name = consume(TokenType.IDENTIFIER, "Expect property name after '.'.");
-                expr = new Get(expr, name);
-            }
-            else break;
-        }
-
-        return expr;
-    }
-
 
     RuntimeException error(Token token, String message){
         return new RuntimeException("Parse Error at line " + token.line + ": " + message);

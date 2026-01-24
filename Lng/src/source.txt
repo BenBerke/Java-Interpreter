@@ -1,17 +1,9 @@
-degisken i = 0;
-degisken ilkZaman = dogru;
-degisken bitis = "bitti";
-
-islev dongu(bas, son){
-    eger(ilkZaman) i = bas;
-    ilkZaman = yanlis;
+var i = 0;
+func loop(){
     i = i + 1;
-    yaz i;
-    eger(i == son) {
-        yaz bitis;
-        dondur;
-    }
-    dongu(bas, son);
+    print i;
+    if(i >= 5) return;
+    loop();
 }
 
-dongu(3, 16);
+loop();

@@ -39,18 +39,13 @@ public class Main {
                     i++;
                 }
                 switch(identifier.toString().toLowerCase()){
-                    case "yaz": tokens.add(new Token(TokenType.PRINT, "print", null, line)); break;
-                    case "eger":tokens.add(new Token(TokenType.IF, "if", null, line)); break;
-                    case "degisken": tokens.add(new Token(TokenType.VAR, "var", null, line)); break;
-                    case "dogru": tokens.add(new Token(TokenType.TRUE, "true", 1.0, line));  break;
-                    case "yanlis": tokens.add(new Token(TokenType.FALSE, "false", 0.0, line));  break;
-                    case "islev": tokens.add(new Token(TokenType.FUNCTION, "function", null, line)); break;
-                    case "dondur": tokens.add(new Token(TokenType.RETURN, "return", null, line)); break;
-
-                    case "buyuktur": tokens.add(new Token(TokenType.GRTR, ">", null, line)); break;
-                    case "kucuktur": tokens.add(new Token(TokenType.SML, "<", null, line)); break;
-                    case "esittir": tokens.add(new Token(TokenType.EQL_EQL, "==", null, line)); break;
-                    
+                    case "print": tokens.add(new Token(TokenType.PRINT, "print", null, line)); break;
+                    case "if":tokens.add(new Token(TokenType.IF, "if", null, line)); break;
+                    case "var": tokens.add(new Token(TokenType.VAR, "var", null, line)); break;
+                    case "true": tokens.add(new Token(TokenType.TRUE, "true", 1.0, line));  break;
+                    case "false": tokens.add(new Token(TokenType.FALSE, "false", 0.0, line));  break;
+                    case "func": tokens.add(new Token(TokenType.FUNCTION, "function", null, line)); break;
+                    case "return": tokens.add(new Token(TokenType.RETURN, "return", null, line)); break;
                     default: tokens.add(new Token(TokenType.IDENTIFIER, identifier.toString(), null, line)); break;
                 }
                 continue;
