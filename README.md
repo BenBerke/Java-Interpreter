@@ -1,18 +1,93 @@
-## Getting Started
+# Custom Programming Language Interpreter (Java)
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+## Overview
 
-## Folder Structure
+This project is a **custom-designed programming language interpreter** implemented in **Java**, created to demonstrate core concepts of programming language design and interpreter architecture.
 
-The workspace contains two folders by default, where:
+The language supports variables, control flow, functions, and boolean logic, executing source code through a complete pipeline of **lexing, parsing, and interpretation**.
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+This project is intended as a **technical skill showcase for CV/portfolio purposes**, not as a production-ready language.
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+---
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+## Language Features
 
-## Dependency Management
+### Data Types
+- `int`
+- `string`
+- `bool`
 
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+### Variables
+- Declaration and assignment
+- Type-safe evaluation
+- Local and global scope handling
+
+### Control Flow
+- `if` statements
+- Conditional branching
+
+### Boolean Logic
+- Logical operators: `&&`, `||`, `!`
+- Comparison operators: `==`, `!=`, `<`, `>`, `<=`, `>=`
+- Expression precedence handling
+
+### Functions
+- Function definitions
+- Parameters
+- Local variables
+- Independent function scopes
+- Return values
+
+### Built-in Functionality
+- `print` statement for output
+
+---
+
+## Architecture
+
+The interpreter follows a classic language implementation pipeline:
+
+Source Code
+↓
+Lexer (Tokenization)
+↓
+Parser (AST Generation)
+↓
+Interpreter (AST Evaluation)
+
+
+### Core Components
+- **Lexer** — Converts source code into tokens
+- **Parser** — Builds an Abstract Syntax Tree (AST)
+- **AST Nodes** — Represent expressions and statements
+- **Interpreter** — Executes the AST
+- **Environment System** — Manages variable scopes and function contexts
+
+---
+
+## Key Technical Concepts Demonstrated
+
+- Interpreter design and implementation
+- Recursive descent parsing
+- Abstract Syntax Tree (AST) architecture
+- Scope and lifetime management
+- Function call stack handling
+- Boolean logic evaluation
+- Runtime error handling
+- Object-oriented design in Java
+
+---
+
+## Example Syntax
+
+```text
+
+var i = 0;
+func loop(){
+    i = i + 1;
+    print i;
+    if(i >= 5) return;
+    loop();
+}
+
+loop();
