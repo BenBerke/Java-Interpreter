@@ -79,15 +79,17 @@ Interpreter (AST Evaluation)
 ---
 
 ## Example Syntax
-
+This function uses recursion to print the current Fibonacci number and then calls itself with the next two values in the sequence until the specified limit is reached.
 ```text
 
-var i = 0;
-func loop(){
-    i = i + 1;
-    print i;
-    if(i >= 5) return;
-    loop();
+var limit = 50;
+
+func fib(a, b) {
+    print a;
+    var next = a + b;
+    if (next >= limit) return;
+    fib(b, next);
 }
 
-loop();
+// Start the sequence with 0 and 1
+fib(0, 1);
