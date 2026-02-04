@@ -48,11 +48,11 @@ This project is intended as a **technical skill showcase for CV/portfolio purpos
 The interpreter follows a classic language implementation pipeline:
 
 Source Code
-↓
+->
 Lexer (Tokenization)
-↓
+->
 Parser (AST Generation)
-↓
+->
 Interpreter (AST Evaluation)
 
 
