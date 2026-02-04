@@ -91,5 +91,4 @@ func fib(a, b) {
     fib(b, next);
 }
 
-// Start the sequence with 0 and 1
 fib(0, 1);
